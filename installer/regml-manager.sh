@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DEFAULT_BASE_DIR="/srv/gml"
-COMPOSE_URL="https://raw.githubusercontent.com/serega404/ReGml.Backend/refs/heads/master/docker-compose-prod.yml"
+COMPOSE_URL="${COMPOSE_URL:-https://raw.githubusercontent.com/serega404/ReGml.Backend/refs/heads/master/docker-compose-prod.yml}"
 DEFAULT_TAGS_URL="https://api.github.com/repos/serega404/ReGml.Backend/tags?per_page=100"
 
 ACTION=""
