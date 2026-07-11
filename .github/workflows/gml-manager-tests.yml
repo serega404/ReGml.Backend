@@ -1,4 +1,4 @@
-name: ReGml Manager Tests
+name: Gml Manager Tests
 
 on:
   workflow_dispatch:
@@ -20,13 +20,13 @@ on:
       - "installer/gml-manager.sh"
       - "installer/installer.env"
       - "docker-compose-prod.yml"
-      - ".github/workflows/regml-manager-tests.yml"
+      - ".github/workflows/gml-manager-tests.yml"
 
 permissions:
   contents: read
 
 concurrency:
-  group: regml-manager-tests-${{ github.ref }}
+  group: gml-manager-tests-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -59,7 +59,7 @@ jobs:
             runner: ubuntu-22.04-arm
 
     env:
-      INSTALL_DIR: /tmp/regml-manager-ci-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.distro }}-${{ matrix.arch }}
+      INSTALL_DIR: /tmp/gml-manager-ci-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.distro }}-${{ matrix.arch }}
       INSTALL_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.install_version || 'v2025.3.2' }}
       UPDATE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.update_version || 'v2025.3.1' }}
 
@@ -237,7 +237,7 @@ jobs:
           if [ -d "$INSTALL_DIR" ]; then
             sudo env INSTALL_DIR="$INSTALL_DIR" sh -c 'cd "$INSTALL_DIR" && docker compose ps && docker compose images && docker compose logs --tail=120'
           fi
-          sudo find /tmp -maxdepth 1 -type d -name "regml-manager-ci-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.distro }}-${{ matrix.arch }}*" -print
+          sudo find /tmp -maxdepth 1 -type d -name "gml-manager-ci-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.distro }}-${{ matrix.arch }}*" -print
 
       - name: Cleanup
         if: always()
