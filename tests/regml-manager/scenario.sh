@@ -145,18 +145,18 @@ echo "Update version: $UPDATE_VERSION"
 
 as_root rm -rf "$INSTALL_DIR" "$INSTALL_DIR"_backup_*
 
-as_root sh "$REPO_DIR/installer/regml-manager.sh" install --version "$INSTALL_VERSION" --dir "$INSTALL_DIR"
+as_root sh "$REPO_DIR/installer/gml-manager.sh" install --version "$INSTALL_VERSION" --dir "$INSTALL_DIR"
 
 as_root test -f "$INSTALL_DIR/.env"
 as_root test -f "$INSTALL_DIR/docker-compose.yml"
 as_root grep -qx "GML_VERSION=$INSTALL_VERSION" "$INSTALL_DIR/.env"
 wait_for_compose "install"
 
-as_root sh "$REPO_DIR/installer/regml-manager.sh" update --version "$UPDATE_VERSION" --dir "$INSTALL_DIR"
+as_root sh "$REPO_DIR/installer/gml-manager.sh" update --version "$UPDATE_VERSION" --dir "$INSTALL_DIR"
 as_root grep -qx "GML_VERSION=$UPDATE_VERSION" "$INSTALL_DIR/.env"
 wait_for_compose "update"
 
-as_root sh "$REPO_DIR/installer/regml-manager.sh" delete --dir "$INSTALL_DIR"
+as_root sh "$REPO_DIR/installer/gml-manager.sh" delete --dir "$INSTALL_DIR"
 as_root test ! -d "$INSTALL_DIR"
 
 backup_name="$(basename "$INSTALL_DIR")_backup_*"

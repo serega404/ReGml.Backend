@@ -1,8 +1,15 @@
 #!/bin/sh
 
 DEFAULT_BASE_DIR="/srv/gml"
-COMPOSE_URL="${COMPOSE_URL:-https://raw.githubusercontent.com/serega404/ReGml.Backend/refs/heads/master/docker-compose-prod.yml}"
-DEFAULT_TAGS_URL="https://api.github.com/repos/serega404/ReGml.Backend/tags?per_page=100"
+GITHUB_REPOSITORY="${GITHUB_REPOSITORY:-serega404/ReGml.Backend}"
+COMPOSE_URL="${COMPOSE_URL:-https://raw.githubusercontent.com/$GITHUB_REPOSITORY/refs/heads/master/docker-compose-prod.yml}"
+ENV_URL="${ENV_URL:-https://raw.githubusercontent.com/$GITHUB_REPOSITORY/refs/heads/master/installer/installer.env}"
+DEFAULT_TAGS_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/tags?per_page=100"
+
+SCRIPT_DIR=""
+if [ -f "$0" ]; then
+    SCRIPT_DIR=$(CDPATH= cd "$(dirname "$0")" && pwd)
+fi
 
 ACTION=""
 BASE_DIR=""
@@ -314,7 +321,7 @@ show_spinner() {
 run_step() {
     text="$1"
     shift
-    log_file=$(mktemp "${TMPDIR:-/tmp}/regml-manager.XXXXXX") || exit 1
+    log_file=$(mktemp "${TMPDIR:-/tmp}/gml-manager.XXXXXX") || exit 1
 
     (
         "$@"
@@ -480,32 +487,26 @@ generate_security_key() {
     return 1
 }
 
+# Copy the bundled .env template, or download it when this script is piped to sh.
+copy_env_template() {
+    env_file="$1"
+
+    if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/installer.env" ]; then
+        cp "$SCRIPT_DIR/installer.env" "$env_file"
+        return 0
+    fi
+
+    curl -fsSL "$ENV_URL" -o "$env_file"
+}
+
 # Create the initial .env file without overwriting future user changes.
 write_default_env() {
     env_file="$BASE_DIR/.env"
     security_key=$(generate_security_key) || return 1
 
-    cat > "$env_file" <<EOF
-UID=0
-GID=0
-
-GML_VERSION=$VERSION
-SECURITY_KEY=$security_key
-PROJECT_NAME=GmlBackend
-PROJECT_DESCRIPTION=GmlBackend
-PROJECT_POLICYNAME=GmlBackendPolicy
-PROJECT_PATH=
-
-SWAGGER_ENABLED=false
-
-PORT_GML_BACKEND=5000
-PORT_GML_FRONTEND=5003
-PORT_GML_FILES=5005
-PORT_GML_SKINS=5006
-
-SERVICE_TEXTURE_ENDPOINT=http://gml-web-skins:8085
-MARKET_ENDPOINT=https://gml-market.recloud.tech
-EOF
+    copy_env_template "$env_file" || return 1
+    upsert_env_value "$env_file" "GML_VERSION" "$VERSION"
+    upsert_env_value "$env_file" "SECURITY_KEY" "$security_key"
 }
 
 # Insert or update one KEY=value entry while preserving all other .env lines.

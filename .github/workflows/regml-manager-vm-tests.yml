@@ -16,7 +16,8 @@ name: ReGml Manager VM Tests
         type: string
   pull_request:
     paths:
-      - "installer/regml-manager.sh"
+      - "installer/gml-manager.sh"
+      - "installer/installer.env"
       - "docker-compose-prod.yml"
       - ".github/workflows/regml-manager-vm-tests.yml"
       - "tests/regml-manager/**"
@@ -24,7 +25,8 @@ name: ReGml Manager VM Tests
     branches:
       - master
     paths:
-      - "installer/regml-manager.sh"
+      - "installer/gml-manager.sh"
+      - "installer/installer.env"
       - "docker-compose-prod.yml"
       - ".github/workflows/regml-manager-vm-tests.yml"
       - "tests/regml-manager/**"

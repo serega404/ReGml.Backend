@@ -17,7 +17,8 @@ on:
     branches:
       - master
     paths:
-      - "installer/regml-manager.sh"
+      - "installer/gml-manager.sh"
+      - "installer/installer.env"
       - "docker-compose-prod.yml"
       - ".github/workflows/regml-manager-tests.yml"
 
@@ -83,7 +84,7 @@ jobs:
       - name: Install ReGml Manager stack
         run: |
           set -eux
-          sudo sh ./installer/regml-manager.sh install --version "$INSTALL_VERSION" --dir "$INSTALL_DIR"
+          sudo sh ./installer/gml-manager.sh install --version "$INSTALL_VERSION" --dir "$INSTALL_DIR"
 
       - name: Validate installation files
         run: |
@@ -155,7 +156,7 @@ jobs:
       - name: Update ReGml Manager stack
         run: |
           set -eux
-          sudo sh ./installer/regml-manager.sh update --version "$UPDATE_VERSION" --dir "$INSTALL_DIR"
+          sudo sh ./installer/gml-manager.sh update --version "$UPDATE_VERSION" --dir "$INSTALL_DIR"
           sudo grep -qx "GML_VERSION=$UPDATE_VERSION" "$INSTALL_DIR/.env"
 
       - name: Validate updated Docker Compose state
@@ -221,7 +222,7 @@ jobs:
       - name: Delete ReGml Manager stack
         run: |
           set -eux
-          sudo sh ./installer/regml-manager.sh delete --dir "$INSTALL_DIR"
+          sudo sh ./installer/gml-manager.sh delete --dir "$INSTALL_DIR"
           sudo test ! -d "$INSTALL_DIR"
           backup_name="$(basename "$INSTALL_DIR")_backup_*"
           backup_dir="$(sudo find /tmp -maxdepth 1 -type d -name "$backup_name" | head -n 1)"
