@@ -581,7 +581,8 @@ backup_install_directory() {
 
 # Show reachable admin panel URLs after install or update.
 write_success_message() {
-    port=5003
+    port=$(get_env_value "$BASE_DIR/.env" "PORT_GML_FRONTEND")
+    port=${port:-5003}
     ip_list=""
 
     if command -v ip >/dev/null 2>&1; then
