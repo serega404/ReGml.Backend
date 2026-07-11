@@ -5,11 +5,11 @@
 # What Changed In ReGml
 
 - Removed the YARP proxy and replaced it with Nginx.
-- Updated the installation and configuration documentation.
-- Added a custom installer and version manager.
 - Added Russian localization of the documentation.
-- Supported version start 2025.3 and newer of Gml.Backend.
-- Added alpine linux support for the installer.
+- Updated the installation and configuration documentation.(ported to Gml.Backend)
+- Added a custom installer and version manager. (ported to Gml.Backend)
+- Supported version start 2025.3 and newer of Gml.Backend. (ported to Gml.Backend)
+- Added alpine linux support for the installer. (ported to Gml.Backend)
 
 Tested on Ubuntu 22.04+ ([ci](https://github.com/serega404/ReGml.Backend/actions/workflows/regml-manager-tests.yml)), Debian 13, and Alpine Linux 3.23.
 
@@ -74,6 +74,7 @@ git clone --recursive https://github.com/serega404/ReGml.Backend.git
 ```
 
 ### Step 2: Navigate to the Project Directory
+
 Move to the project directory:
 
 ```bash
@@ -81,6 +82,7 @@ cd Gml.Backend
 ```
 
 ### Step 3: Configure the `.env` File
+
 Create or edit the `.env` file in the root of the `Gml.Backend` directory. Below is an example configuration:
 
 ```plaintext
@@ -109,6 +111,7 @@ MARKET_ENDPOINT=https://gml-market.recloud.tech
 ```
 
 ### Step 4: Configure the Client `.env` File
+
 Create or edit the `.env` file in the `src/Gml.Web.Client/` directory:
 
 ```plaintext
@@ -118,6 +121,7 @@ NEXT_PUBLIC_MARKETPLACE_URL=https://gml-market.recloud.tech
 ```
 
 ### Step 5: Launch the Project with Docker
+
 Ensure Docker is installed and running on your system. Then, execute the following command to build and start the project:
 
 ```bash
@@ -127,9 +131,11 @@ docker compose up -d --build
 Docker will download the necessary images and launch the project. Once the containers are running, you can access the services in your browser at the following addresses:
 
 ## Infrastructure
+
 > **Note**: Starting from version `0.1.0-rc1`, server files are stored in the installation directory. [Learn more](#).
 
 ### Server Infrastructure
+
 - **Web API**: `http://localhost:5000` (Main service)
 - **Web Dashboard**: `http://localhost:5003` (Requires registration)
 - **Gml.Web.Skin.Service**: `http://localhost:5006` (Accessible only within the container)
